@@ -1,0 +1,222 @@
+def game(window, player):
+    # Set Up Board
+    shouldExit = False
+        while not shouldExit:
+            window.setBackground('white')
+                # Draws the tic-tac-toe grid
+                Line(Point(width / 3,0), Point(width / 3, height)).draw(Window)
+                Line(Point(2 * width / 3,0), Point(2 * width / 3, height)).draw(Window)
+                Line(Point(0, height / 3), Point(width, height / 3)).draw(Window)
+                Line(Point(0, 2 * height / 3), Point(width, 2 * height / 3)).draw(Window)
+                # Array of spots on the board, going left to right
+                # from the top-left corner
+                # Empty string - empty spot
+                board = ["","","","","","","","",""]
+                # Define Some Variables
+                while Win == 0:
+                    Tie = 1
+                        # Determines Player 1 or 2
+                        if PlayerD == 0:
+                            Player = Player1
+                                PlayerD = 1
+                        else:
+                            Player = Player2
+                                PlayerD = 0
+                        # PlayerD = 0 means "O"/Player 2
+                        # The Player's Move
+                        try:
+                            PlayerTurn.undraw()
+                        except:
+                            Mouse = 0
+                        PlayerTurn = Text(Point(200,395),'Your move, {}.'.format(Player))
+                        if PlayerD == 0:
+                            PlayerTurn.setFill('red')
+                                else:
+                                PlayerTurn.setFill('blue')
+                                    PlayerTurn.setSize(13)
+                                        PlayerTurn.draw(Window)
+                                            Error = 1
+                                                while Error == 1:
+                                                    point = Window.getMouse()
+                                                        x = point.getX()
+                                                            y = point.getY()
+                                                                x = int(x/133) + 1
+                                                                    y = int(y/133) + 1
+                                                                        CurrentPos = x + ((y - 1) * 3) - 1
+                                                                            if OccupiedPos[CurrentPos] == 10:
+                                                                                OccupiedPos[CurrentPos] = PlayerD
+                                                                                    Error = 0
+                                                                                        else:
+                                                                                            PlayerTurn.undraw()
+                                                                                                PlayerTurn = Text(Point(200,395),'I think you made a mistake...')
+                                                                                                    PlayerTurn.setSize(13)
+                                                                                                        PlayerTurn.draw(Window)
+                                                                                                            sleep(1)
+                                                                                                                PlayerTurn.undraw()
+                                                                                                                    PlayerTurn = Text(Point(200,395),'The space you choose cannot already be occupied...')
+                                                                                                                        PlayerTurn.setSize(13)
+                                                                                                                            PlayerTurn.draw(Window)
+                                                                                                                                x, y = x - 1, y - 1
+                                                                                                                                    if PlayerD == 1:
+                                                                                                                                        # Draw an X
+                                                                                                                                        x2 = x * 133 + 133
+                                                                                                                                            x = x * 133
+                                                                                                                                                y2 = y * 133 + 133
+                                                                                                                                                    y = y * 133
+                                                                                                                                                        line = Line(Point(x,y),Point(x2, y2))
+                                                                                                                                                            line.setOutline('blue')
+                                                                                                                                                                line.draw(Window)
+                                                                                                                                                                    line = Line(Point(x2,y),Point(x, y2))
+                                                                                                                                                                        line.setOutline('blue')
+                                                                                                                                                                            line.draw(Window)
+                                                                                                                                                                                else:
+                                                                                                                                                                                    #Draw an O
+                                                                                                                                                                                    x = x * 133 + 66
+                                                                                                                                                                                        y = y * 133 + 66
+                                                                                                                                                                                            circle = Circle(Point(x, y), 60)
+                                                                                                                                                                                                circle.setOutline('red')
+                                                                                                                                                                                                    circle.draw(Window)
+                                                                                                                                                                                                        # Checks for a tie
+                                                                                                                                                                                                        for Pos1 in range(9):
+                                                                                                                                                                                                            if OccupiedPos[Pos1] == 10:
+                                                                                                                                                                                                                Tie = 0
+                                                                                                                                                                                                                    #Check for a win
+                                                                                                                                                                                                                    for Pos1 in range(3):
+                                                                                                                                                                                                                        if ((OccupiedPos[0 + (Pos1 * 3)] == OccupiedPos[1 + (Pos1 * 3)]) and (OccupiedPos[1 + (Pos1 * 3)] == OccupiedPos[2 + (Pos1 * 3)]) and OccupiedPos[0 + (Pos1 * 3)] != 10):
+                                                                                                                                                                                                                            Win = 1
+                                                                                                                                                                                                                                WinLine = Pos1
+                                                                                                                                                                                                                                    WinMethod = "Across"
+                                                                                                                                                                                                                                        Winner = PlayerD
+                                                                                                                                                                                                                                            for Dot in range(0,400,3):
+                                                                                                                                                                                                                                                Line(Point(0,WinLine * 133 + 66),Point(Dot,WinLine * 133 + 66)).draw(Window)
+                                                                                                                                                                                                                                                    for Pos1 in range(3):
+                                                                                                                                                                                                                                                        if ((OccupiedPos[0 + Pos1] == OccupiedPos[3 + Pos1]) and (OccupiedPos[3 + Pos1] == OccupiedPos[6 + Pos1]) and OccupiedPos[0 + Ps1] != 10):
+                                                                                                                                                                                                                                                            Win = 1
+                                                                                                                                                                                                                                                                WinLine = Pos1
+                                                                                                                                                                                                                                                                    WinMethod = "Down"
+                                                                                                                                                                                                                                                                        Winner = PlayerD
+                                                                                                                                                                                                                                                                            for Dot in range(0,400,3):
+                                                                                                                                                                                                                                                                                Line(Point(WinLine * 133 + 66,Dot),Point(WinLine * 133 + 66,0)).draw(Window)
+                                                                                                                                                                                                                                                                                    if ((OccupiedPos[0] == OccupiedPos[4]) and (OccupiedPos[4] == OccupiedPos[8]) and OccupiedPos[0] != 10):
+                                                                                                                                                                                                                                                                                        Win = 1
+                                                                                                                                                                                                                                                                                            WinLine = Pos1
+                                                                                                                                                                                                                                                                                                WinMethod = "Diagonal1"
+                                                                                                                                                                                                                                                                                                    Winner = PlayerD
+                                                                                                                                                                                                                                                                                                        for Dot in range(0,400,3):
+                                                                                                                                                                                                                                                                                                            Line(Point(Dot,Dot),Point(0, 0)).draw(Window)
+                                                                                                                                                                                                                                                                                                                if ((OccupiedPos[2] == OccupiedPos[4]) and (OccupiedPos[4] == OccupiedPos[6]) and OccupiedPos[2] != 10):
+                                                                                                                                                                                                                                                                                                                    Win = 1
+                                                                                                                                                                                                                                                                                                                        WinLine = Pos1
+                                                                                                                                                                                                                                                                                                                            WinMethod = "Diagonal2"
+                                                                                                                                                                                                                                                                                                                                Winner = PlayerD
+                                                                                                                                                                                                                                                                                                                                    for Dot in range(0,400,3):
+                                                                                                                                                                                                                                                                                                                                        Line(Point(400 - Dot,Dot),Point(400, 0)).draw(Window)
+                                                                                                                                                                                                                                                                                                                                            if Win == 1:
+                                                                                                                                                                                                                                                                                                                                                if PlayerD == 0:
+                                                                                                                                                                                                                                                                                                                                                    text = Text(Point(200,150),("Congratulations, {}! You won!".format(Player2)))
+                                                                                                                                                                                                                                                                                                                                                        text.setSize(20)
+                                                                                                                                                                                                                                                                                                                                                            text.setFace('helvetica')
+                                                                                                                                                                                                                                                                                                                                                                text.setTextColor((color_rgb(130,0,130)))
+                                                                                                                                                                                                                                                                                                                                                                    text.draw(Window)
+                                                                                                                                                                                                                                                                                                                                                                        else:
+                                                                                                                                                                                                                                                                                                                                                                            text = Text(Point(200,150),("Congratulations, {}! You won!".format(Player1)))
+                                                                                                                                                                                                                                                                                                                                                                                text.setSize(20)
+                                                                                                                                                                                                                                                                                                                                                                                    text.setFace('helvetica')
+                                                                                                                                                                                                                                                                                                                                                                                        text.setTextColor((color_rgb(130,0,130)))
+                                                                                                                                                                                                                                                                                                                                                                                            text.draw(Window)
+                                                                                                                                                                                                                                                                                                                                                                                                if Tie == 1 and Win == 0:
+                                                                                                                                                                                                                                                                                                                                                                                                    print ("Sorry... tie game.")
+                                                                                                                                                                                                                                                                                                                                                                                                        text = Text(Point(200, 200),'Sorry... tie game.')
+                                                                                                                                                                                                                                                                                                                                                                                                            text.setSize(20)
+                                                                                                                                                                                                                                                                                                                                                                                                                text.setStyle('italic')
+                                                                                                                                                                                                                                                                                                                                                                                                                    text.setTextColor((color_rgb(130,0,130)))
+                                                                                                                                                                                                                                                                                                                                                                                                                        text.draw(Window)
+                                                                                                                                                                                                                                                                                                                                                                                                                            Win = 1
+
+
+def main():
+    #try:
+    window = GraphWin('Tic-Tac-Toe', width, height)
+        drawIntro(window)
+            game(window, player)
+                #Closes Up
+                sleep(1.5)
+                    DosLines = 200
+                        while DosLines > 0:
+                            DosLines = int(DosLines - DosLines * 0.1)
+                                CloseUp = Rectangle(Point(DosLines, DosLines),Point(400 - DosLines, 400 - DosLines))
+                                CloseUp.setFill('black')
+                                CloseUp.draw(Window)
+                        CloseUp = Rectangle(Point(0,0),Point(400, 400))
+                        CloseUp.setFill('black')
+                        CloseUp.draw(Window)
+                        text = Text(Point(200, 200),'Play Again?')
+                        text2 = Text(Point(100, 300),'Yes')
+                        text3 = Text(Point(300, 300),'No')
+                        text.setSize(30)
+                        text.setStyle('italic')
+                        text.setTextColor((color_rgb(255,255,255)))
+                        text.draw(Window)
+                        text2.setSize(30)
+                        text2.setStyle('bold')
+                        text2.setTextColor((color_rgb(255,255,255)))
+                        text2.draw(Window)
+                        text3.setSize(30)
+                        text3.setStyle('bold')
+                        text3.setTextColor((color_rgb(255,255,255)))
+                        text3.draw(Window)
+                        Mouse = 0
+                        while Mouse == 0:
+                            point1 = Window.getMouse()
+                                x = point1.getX()
+                                y = point1.getY()
+                                if ((x > 50 and x < 200) and (y < 325 and y > 275)):
+                                    Mouse = 1
+                                elif ((x > 200 and x < 350) and (y < 325 and y > 275)):
+                                    Mouse = 1
+                                        No = 1
+            window.close()
+#except:
+
+def drawIntro(window):
+    # Displays the intro to the game
+    window.setBackground('black')
+        # Displays a title
+        # Title gradually fades from the background,
+        # becomes white text
+        textSize = 30
+        brightness = 0
+        brightening = True
+        while True:
+            text = Text(Point(width / 2,height / 2),"Tic-Tac-Toe")
+                text.setFill(color_rgb(brightness, brightness, brightness))
+                text.setSize(textSize)
+                text.undraw()
+                text.draw(window)
+                if brightening:
+                    brightness += 2
+                else:
+                    brightness -= 2
+                if brightness >= 150:
+                    brightening = False
+                        sleep(1)
+                if not brightening and brightness <= 100:
+                    break
+        # Retrieves Player Names
+        player = Entry(Point(width / 2, height / 3),10)
+        player.draw(window)
+        text = Text(Point(width / 2, height / 4),'Player Entry')
+        text.setSize(25)
+        text.setFill('white')
+        text.draw(window)
+        sleep(1)
+        text2 = Text(Point(200,375),'Click Anywhere to Start')
+        text2.setSize(25)
+        text2.setFill('white')
+        text2.draw(window)
+        window.getMouse()
+        player = player.getText()
+        text.undraw()
+    text2.undraw()
+
+main()
