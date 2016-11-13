@@ -1,5 +1,5 @@
 # Tic-Tac-Toe
 
-![Alt text](TicTacToeDemo.png?raw=true "Demo")
+Uses AI algorithms to select the best possible move. Created in Python.
 
-Automated Tic-Tac-Toe game created in Python.
+![Alt text](TicTacToeDemo.png?raw=true "Demo")
