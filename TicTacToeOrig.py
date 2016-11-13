@@ -1,12 +1,13 @@
 from time import *
 from graphics import *
+import sys
 
 BLANK = " "
 X = "X"
 O = "O"
 
-WIN = 10    #Points awarded to the computer for a win
-LOSS = -10  #Points awarded to the computer for a loss
+WIN = 100    #Points awarded to the computer for a win
+LOSS = -100  #Points awarded to the computer for a loss
 TIE = 0     #Points awarded to the computer for a tie
 
 NO_WIN = "NO_WIN"
@@ -20,15 +21,13 @@ PLAYER = O
 def main():
     #try:
         turnNumber = 0
-        window = Window("Tic-Tac-Toe", 800, 800)
+        window = Window("Tic-Tac-Toe", 500, 700)
         opponent = Computer()
-        board = Board(EMPTY)
-        
-        print(table.getLargestValue())
-        print(table.getSmallestValue())
+        board = Board(EMPTY, 500, 500)
         
         #Loops until a player wins or there is a tie
         while (board.checkForWin(turnNumber) == NO_WIN):
+            window.draw(board);
             #If turn number is even, the computer (X) goes
             if (turnNumber % 2 == 0):
                 opponent.selectBestMove(board, COMP, turnNumber, True)
@@ -36,26 +35,27 @@ def main():
             #If turn number is odd, the player (O) goes
             else:
                 while (turnNumber % 2 == 1):
-                    window.displayText("Select a move!")
-                    c, r = window.getMouseEntry()
+                    window.displayText("Select a move!", board)
+                    c, r = window.getMouseEntry(board)
                     if (board.isEmptyAt(c, r)):
-                        window.displayText("Good move!")
+                        window.displayText("Good move!", board)
                         board.setValueAt(c, r, PLAYER)
                         turnNumber += 1
                     else:
-                        window.displayText("Invalid move!")
+                        window.displayText("Invalid move!", board)
             board.draw(window)
-
-        if (board.checkForWin(turnNumber) == TIE):
-            print ("Tie!")
-        if (board.checkForWin(turnNumber) == PLAYER):
-            print ("You win!")
-        if (board.checkForWin(turnNumber) == COMP):
-            print ("You lose!")
-
+            time.sleep(1)
+    
+            if (board.checkForWin(turnNumber) == TIE):
+                window.displayText("Tie!", board)
+            if (board.checkForWin(turnNumber) == PLAYER):
+                window.displayText("You win!", board)
+            if (board.checkForWin(turnNumber) == COMP):
+                window.displayText("You lose!", board)
+        
         time.sleep(2)
-    #except:
-        #print("Something went wrong")
+#except:
+#print("Something went wrong")
 
 
 
@@ -68,21 +68,28 @@ class Window:
         self.window = GraphWin(title, width, height)
         self.width = width
         self.height = height
-
+    
+    #Draws the console at the bottom of the screen
+    def draw(self, board):
+        rect = Rectangle(Point(0, board.getHeight()), Point(self.width, self.height))
+        rect.setFill('black')
+        rect.draw(self.getWindow())
+    
     #Returns the coordinates of the entry clicked on
-    def getMouseEntry(self):
+    def getMouseEntry(self, board):
         point = self.window.getMouse()
-        return int(point.getX() / self.width * 3), int(point.getY() / self.height * 3)
+        return int(point.getX() / board.getWidth() * 3), int(point.getY() / board.getHeight() * 3)
     
     #Displays text in the window
-    def displayText(self, text):
+    def displayText(self, text, board):
         if (self.text != BLANK):
             (self.text).undraw()
-        self.text = Text(Point(self.window.getWidth() / 2.0, self.window.getHeight() / 8.0), text)
+        self.text = Text(Point(self.window.getWidth() / 2.0, (self.window.getHeight() - board.getHeight()) / 2 + board.getHeight()), text)
+        (self.text).setStyle('italic')
         (self.text).setSize(32)
-        (self.text).setFill('blue')
+        (self.text).setFill('green')
         (self.text).draw(self.getWindow())
-
+    
     def getWindow(self):
         return self.window
     def getWidth(self):
@@ -108,7 +115,7 @@ class Table:
     #Gets the entry at the given x, y coordinates
     def getValueAt(self, x, y):
         return self.table[y * 3 + x]
-
+    
     #Finds the largest value in the table
     #Returns the coordinates of the largest value and the largest value
     def getLargestValue(self):
@@ -136,7 +143,7 @@ class Table:
                     smallestValue = self.getValueAt(x, y)
                     row = y
                     column = x
-
+    
         return column, row, smallestValue
 
     #Returns the array containing the board
@@ -147,24 +154,29 @@ class Table:
 
 
 class Board:
-    def __init__(self, board):
+    def __init__(self, board, width, height):
         if (board == EMPTY):
             self.board = Table(EMPTY)
         else:
             self.board = Table(board.getBoard().getTable())
+        self.width = width
+        self.height = height
 
     def draw(self, window):
         for y in range (1, 3):
-            Line(Point(0, y * window.getHeight() / 3.0), Point(window.getWidth(), y * window.getHeight() / 3.0)).draw(window.getWindow())
+            Line(Point(0, y * self.height / 3.0), Point(self.width, y * self.height / 3.0)).draw(window.getWindow())
         for x in range (1, 3):
-            Line(Point(x * window.getWidth() / 3.0, 0), Point(x * window.getWidth() / 3.0, window.getHeight())).draw(window.getWindow())
+            Line(Point(x * self.width / 3.0, 0), Point(x * self.width / 3.0, self.height)).draw(window.getWindow())
 
         for x in range (3):
             for y in range (3):
-                entry = Text(Point(x * window.getWidth() / 3.0 + window.getWidth() / 6.0, y * window.getHeight() / 3.0 + window.getHeight() / 6.0), self.board.getValueAt(x, y))
-                entry.setSize(32)
-                entry.setFill('blue')
-                entry.draw(window.getWindow())
+                point = Point(x * self.width / 3.0 + self.width / 6.0, y * self.height / 3.0 + self.height / 6.0)
+                if (self.board.getValueAt(x, y) == O):
+                    image = Image(point, 'o.gif')
+                if (self.board.getValueAt(x, y) == X):
+                    image = Image(point, 'x.gif')
+                if (self.board.getValueAt(x, y) != BLANK):
+                    image.draw(window.getWindow())
 
     def isEmptyAt(self, x, y):
         return (self.board.getValueAt(x, y) == BLANK)
@@ -199,15 +211,19 @@ class Board:
             self.board.getValueAt(2, 0) == self.board.getValueAt(1, 1) and
             self.board.getValueAt(2, 0) == self.board.getValueAt(0, 2)):
             return self.board.getValueAt(1, 1)
-
+            
         if (turnNumber == 9):
             return TIE
-
+            
         return NO_WIN;
 
-    #Returns the board, ONLY REFERENCED BY THE BOARD OBJECT
+    #Returns the board, ONLY USED BY THE BOARD OBJECT
     def getBoard(self):
         return self.board
+    def getWidth(self):
+        return self.width
+    def getHeight(self):
+        return self.height
 
 
 
@@ -230,12 +246,12 @@ class Computer:
             for x in range (3):
                 if (board.isEmptyAt(x, y)):
                     #Create a copy of the inputted gamestate
-                    boardCopy = Board(board)
+                    boardCopy = Board(board, 0, 0)
                     boardCopy.setValueAt(x, y, player)
                     #If the computer wins, assign +10 to the previous gamestate
                     #If the player wins, assign +10 to the previous gamestate
                     if (boardCopy.checkForWin(turnNumber) == COMP):
-                        scores.setValueAt(x, y, WIN)
+                        scores.setValueAt(x, y, WIN - turnNumber)
                     if (boardCopy.checkForWin(turnNumber) == PLAYER):
                         scores.setValueAt(x, y, LOSS)
                     if (boardCopy.checkForWin(turnNumber) == TIE):
@@ -245,13 +261,14 @@ class Computer:
                             scores.setValueAt(x, y, self.selectBestMove(boardCopy, COMP, turnNumber + 1, False))
                         if (player == COMP):
                             scores.setValueAt(x, y, self.selectBestMove(boardCopy, PLAYER, turnNumber + 1, False))
+
         if (player == PLAYER):
             column, row, score = scores.getSmallestValue()
         if (player == COMP):
             column, row, score = scores.getLargestValue()
-
+        
         if (firstGameState):
-            board.setValueAt(column, row, COMP)
+            board.setValueAt(column, row, player)
         else:
             return score
 
