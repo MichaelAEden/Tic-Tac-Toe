@@ -1,5 +1,5 @@
 # Tic-Tac-Toe
-#####created in Python
+##### created in Python
 # 
 ### Uses AI algorithms to select the best possible move.
 ##### Uses the minimax algorithm and recursion to find the best possible move, so winning against the computer is impossible. 
